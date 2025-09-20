@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GreenDream - Smart Irrigation System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+
+        .nav-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 5px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .tab-button {
+            flex: 1;
+            background: none;
+            border: none;
+            padding: 15px;
+            color: white;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-size: 16px;
+        }
+
+        .tab-button.active {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tab-content {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .plant-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .plant-card {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+
+        .plant-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .plant-status {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .status-good {
+            background: #4CAF50;
+        }
+
+        .status-warning {
+            background: #FF9800;
+        }
+
+        .status-danger {
+            background: #F44336;
+        }
+
+        .moisture-bar {
+            background: #e0e0e0;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .moisture-fill {
+            height: 100%;
+            transition: width 0.5s;
+            border-radius: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #F44336 0%, #E53E3E 100%);
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            border-color: #ff9800;
+            color: #856404;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            border-color: #f44336;
+            color: #721c24;
+        }
+
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .analytics-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .analytics-card h3 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+
+        .connection-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+        }
+
+        .connection-indicator {
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .connected {
+            background: #4CAF50;
+        }
+
+        .disconnected {
+            background: #F44336;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🌱 GreenDream</h1>
+            <p>Smart Wireless Irrigation System</p>
+        </div>
+
+        <div class="nav-tabs">
+            <button class="tab-button active" onclick="showTab('dashboard')">Dashboard</button>
+            <button class="tab-button" onclick="showTab('plants')">Manage Plants</button>
+            <button class="tab-button" onclick="showTab('watering')">Watering Log</button>
+            <button class="tab-button" onclick="showTab('analytics')">Analytics</button>
+            <button class="tab-button" onclick="showTab('settings')">Settings</button>
+        </div>
+
+        <div id="dashboard" class="tab-content">
+            <div class="connection-status">
+                <div class="connection-indicator disconnected pulse" id="connectionIndicator"></div>
+                <span id="connectionStatus">Disconnected from Arduino</span>
+            </div>
+
+            <div id="alerts"></div>
+
+            <div class="plant-grid" id="plantGrid">
+                <!-- Plants will be dynamically added here -->
+            </div>
+        </div>
+
+        <div id="plants" class="tab-content" style="display: none;">
+            <h2>Plant Management</h2>
+            
+            <div class="form-group">
+                <label for="plantName">Plant Name</label>
+                <input type="text" id="plantName" placeholder="e.g., Basil Plant">
+            </div>
+
+            <div class="form-group">
+                <label for="plantType">Plant Type</label>
+                <select id="plantType">
+                    <option value="herb">Herb</option>
+                    <option value="flower">Flower</option>
+                    <option value="vegetable">Vegetable</option>
+                    <option value="succulent">Succulent</option>
+                    <option value="tree">Tree</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="sensorId">Arduino Sensor ID</label>
+                <input type="text" id="sensorId" placeholder="e.g., SENSOR_001">
+            </div>
+
+            <div class="form-group">
+                <label for="moistureThreshold">Minimum Moisture Level (%)</label>
+                <input type="number" id="moistureThreshold" min="0" max="100" value="30">
+            </div>
+
+            <button class="btn" onclick="addPlant()">Add Plant</button>
+
+            <div id="plantList" style="margin-top: 30px;">
+                <h3>Registered Plants</h3>
+                <div id="registeredPlants"></div>
+            </div>
+        </div>
+
+        <div id="watering" class="tab-content" style="display: none;">
+            <h2>Watering Log</h2>
+            
+            <div class="form-group">
+                <label for="waterPlantSelect">Select Plant</label>
+                <select id="waterPlantSelect">
+                    <option value="">Choose a plant...</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="waterAmount">Water Amount (ml)</label>
+                <input type="number" id="waterAmount" min="0" placeholder="e.g., 250">
+            </div>
+
+            <button class="btn" onclick="logWatering()">Log Watering</button>
+
+            <div id="wateringHistory" style="margin-top: 30px;">
+                <h3>Recent Watering History</h3>
+                <div id="wateringLog"></div>
+            </div>
+        </div>
+
+        <div id="analytics" class="tab-content" style="display: none;">
+            <h2>Analytics Dashboard</h2>
+            
+            <div class="analytics-grid">
+                <div class="analytics-card">
+                    <h3 id="totalPlants">0</h3>
+                    <p>Total Plants</p>
+                </div>
+                <div class="analytics-card">
+                    <h3 id="plantsNeedingWater">0</h3>
+                    <p>Need Watering</p>
+                </div>
+                <div class="analytics-card">
+                    <h3 id="todayWaterings">0</h3>
+                    <p>Watered Today</p>
+                </div>
+                <div class="analytics-card">
+                    <h3 id="avgMoisture">0%</h3>
+                    <p>Avg Moisture</p>
+                </div>
+            </div>
+
+            <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; margin-top: 20px;">
+                <h3>Weekly Moisture Trends</h3>
+                <div id="moistureTrends"></div>
+            </div>
+        </div>
+
+        <div id="settings" class="tab-content" style="display: none;">
+            <h2>System Settings</h2>
+            
+            <div class="form-group">
+                <label for="arduinoEndpoint">Arduino Connection Endpoint</label>
+                <input type="text" id="arduinoEndpoint" placeholder="http://192.168.1.100:80" value="http://localhost:3001">
+            </div>
+
+            <div class="form-group">
+                <label for="updateInterval">Data Update Interval (seconds)</label>
+                <input type="number" id="updateInterval" min="5" max="300" value="30">
+            </div>
+
+            <div class="form-group">
+                <label for="notificationSound">Enable Notification Sounds</label>
+                <select id="notificationSound">
+                    <option value="true">Enabled</option>
+                    <option value="false">Disabled</option>
+                </select>
+            </div>
+
+            <button class="btn" onclick="saveSettings()">Save Settings</button>
+            <button class="btn btn-danger" onclick="clearAllData()" style="margin-left: 10px;">Clear All Data</button>
+        </div>
+    </div>
+
+    <script>
+        // Application State
+        let plants = [];
+        let moistureData = {};
+        let wateringLog = [];
+        let settings = {
+            arduinoEndpoint: 'http://localhost:3001',
+            updateInterval: 30,
+            notificationSound: true
+        };
+        let updateTimer;
+
+        // Initialize Application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadData();
+            updateDisplay();
+            startDataUpdates();
+        });
+
+        // Tab Management
+        function showTab(tabName) {
+            const tabs = ['dashboard', 'plants', 'watering', 'analytics', 'settings'];
+            tabs.forEach(tab => {
+                document.getElementById(tab).style.display = tab === tabName ? 'block' : 'none';
+            });
+
+            document.querySelectorAll('.tab-button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            if (tabName === 'analytics') {
+                updateAnalytics();
+            }
+        }
+
+        // Plant Management
+        function addPlant() {
+            const name = document.getElementById('plantName').value;
+            const type = document.getElementById('plantType').value;
+            const sensorId = document.getElementById('sensorId').value;
+            const threshold = parseInt(document.getElementById('moistureThreshold').value);
+
+            if (!name || !sensorId) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            const plant = {
+                id: Date.now(),
+                name,
+                type,
+                sensorId,
+                threshold,
+                addedDate: new Date().toISOString(),
+                currentMoisture: 0,
+                status: 'unknown'
+            };
+
+            plants.push(plant);
+            moistureData[plant.id] = [];
+            saveData();
+            updateDisplay();
+
+            // Clear form
+            document.getElementById('plantName').value = '';
+            document.getElementById('sensorId').value = '';
+            document.getElementById('moistureThreshold').value = '30';
+        }
+
+        function removePlant(plantId) {
+            if (confirm('Are you sure you want to remove this plant?')) {
+                plants = plants.filter(p => p.id !== plantId);
+                delete moistureData[plantId];
+                saveData();
+                updateDisplay();
+            }
+        }
+
+        // Watering Log
+        function logWatering() {
+            const plantId = document.getElementById('waterPlantSelect').value;
+            const amount = parseInt(document.getElementById('waterAmount').value);
+
+            if (!plantId || !amount) {
+                alert('Please select a plant and enter water amount');
+                return;
+            }
+
+            const plant = plants.find(p => p.id == plantId);
+            const log = {
+                id: Date.now(),
+                plantId: parseInt(plantId),
+                plantName: plant.name,
+                amount,
+                timestamp: new Date().toISOString()
+            };
+
+            wateringLog.unshift(log);
+            saveData();
+            updateWateringDisplay();
+
+            // Clear form
+            document.getElementById('waterPlantSelect').value = '';
+            document.getElementById('waterAmount').value = '';
+        }
+
+        // Arduino Communication (Simulated)
+        function connectToArduino() {
+            // In a real implementation, this would connect to your Arduino via HTTP/WebSocket
+            // For now, we'll simulate data updates
+            document.getElementById('connectionStatus').textContent = 'Simulating Arduino Connection';
+            document.getElementById('connectionIndicator').className = 'connection-indicator connected';
+        }
+
+        function simulateArduinoData() {
+            // Simulate moisture readings for each plant
+            plants.forEach(plant => {
+                const moisture = Math.floor(Math.random() * 100);
+                plant.currentMoisture = moisture;
+                
+                // Update status based on threshold
+                if (moisture < plant.threshold) {
+                    plant.status = 'needs-water';
+                } else if (moisture < plant.threshold + 20) {
+                    plant.status = 'warning';
+                } else {
+                    plant.status = 'good';
+                }
+
+                // Store moisture data (keep only last week)
+                if (!moistureData[plant.id]) moistureData[plant.id] = [];
+                moistureData[plant.id].push({
+                    timestamp: new Date().toISOString(),
+                    moisture: moisture
+                });
+
+                // Keep only last 7 days of data
+                const weekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+                moistureData[plant.id] = moistureData[plant.id].filter(
+                    data => new Date(data.timestamp) > weekAgo
+                );
+            });
+
+            saveData();
+            updateDisplay();
+        }
+
+        function startDataUpdates() {
+            connectToArduino();
+            
+            if (updateTimer) {
+                clearInterval(updateTimer);
+            }
+            
+            updateTimer = setInterval(simulateArduinoData, settings.updateInterval * 1000);
+            simulateArduinoData(); // Initial update
+        }
+
+        // Display Updates
+        function updateDisplay() {
+            updatePlantGrid();
+            updatePlantList();
+            updateWaterPlantSelect();
+            updateWateringDisplay();
+            updateAlerts();
+        }
+
+        function updatePlantGrid() {
+            const grid = document.getElementById('plantGrid');
+            
+            if (plants.length === 0) {
+                grid.innerHTML = '<p style="text-align: center; color: #666; grid-column: 1/-1;">No plants registered. Go to "Manage Plants" to add your first plant!</p>';
+                return;
+            }
+
+            grid.innerHTML = plants.map(plant => {
+                const moistureColor = plant.status === 'good' ? '#4CAF50' : 
+                                     plant.status === 'warning' ? '#FF9800' : '#F44336';
+                
+                return `
+                    <div class="plant-card">
+                        <div class="plant-status">
+                            <div class="status-indicator status-${plant.status === 'good' ? 'good' : plant.status === 'warning' ? 'warning' : 'danger'}"></div>
+                            <h3>${plant.name}</h3>
+                        </div>
+                        <p><strong>Type:</strong> ${plant.type.charAt(0).toUpperCase() + plant.type.slice(1)}</p>
+                        <p><strong>Sensor ID:</strong> ${plant.sensorId}</p>
+                        <p><strong>Current Moisture:</strong> ${plant.currentMoisture}%</p>
+                        <p><strong>Minimum Required:</strong> ${plant.threshold}%</p>
+                        
+                        <div class="moisture-bar">
+                            <div class="moisture-fill" style="width: ${plant.currentMoisture}%; background: ${moistureColor};"></div>
+                        </div>
+                        
+                        <p style="font-size: 0.9em; color: #666;">
+                            Last updated: ${new Date().toLocaleTimeString()}
+                        </p>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updatePlantList() {
+            const list = document.getElementById('registeredPlants');
+            
+            if (plants.length === 0) {
+                list.innerHTML = '<p style="color: #666;">No plants registered yet.</p>';
+                return;
+            }
+
+            list.innerHTML = plants.map(plant => `
+                <div class="plant-card">
+                    <h4>${plant.name}</h4>
+                    <p>Type: ${plant.type} | Sensor: ${plant.sensorId} | Threshold: ${plant.threshold}%</p>
+                    <p style="font-size: 0.9em; color: #666;">Added: ${new Date(plant.addedDate).toLocaleDateString()}</p>
+                    <button class="btn btn-danger" onclick="removePlant(${plant.id})" style="margin-top: 10px;">Remove Plant</button>
+                </div>
+            `).join('');
+        }
+
+        function updateWaterPlantSelect() {
+            const select = document.getElementById('waterPlantSelect');
+            select.innerHTML = '<option value="">Choose a plant...</option>' +
+                plants.map(plant => `<option value="${plant.id}">${plant.name}</option>`).join('');
+        }
+
+        function updateWateringDisplay() {
+            const log = document.getElementById('wateringLog');
+            
+            if (wateringLog.length === 0) {
+                log.innerHTML = '<p style="color: #666;">No watering records yet.</p>';
+                return;
+            }
+
+            const recentLogs = wateringLog.slice(0, 10); // Show last 10 entries
+            log.innerHTML = recentLogs.map(entry => `
+                <div class="plant-card" style="margin-bottom: 10px;">
+                    <h4>${entry.plantName}</h4>
+                    <p><strong>Amount:</strong> ${entry.amount}ml</p>
+                    <p><strong>Date:</strong> ${new Date(entry.timestamp).toLocaleString()}</p>
+                </div>
+            `).join('');
+        }
+
+        function updateAlerts() {
+            const alertsDiv = document.getElementById('alerts');
+            const plantsNeedingWater = plants.filter(p => p.status === 'needs-water');
+            const plantsWarning = plants.filter(p => p.status === 'warning');
+
+            let alertsHTML = '';
+
+            if (plantsNeedingWater.length > 0) {
+                alertsHTML += `
+                    <div class="alert alert-danger">
+                        <strong>⚠️ Plants Need Water!</strong><br>
+                        ${plantsNeedingWater.map(p => p.name).join(', ')} need watering immediately.
+                    </div>
+                `;
+
+                if (settings.notificationSound) {
+                    // In a real app, you'd play a notification sound here
+                    console.log('🔔 Notification: Plants need water!');
+                }
+            }
+
+            if (plantsWarning.length > 0) {
+                alertsHTML += `
+                    <div class="alert alert-warning">
+                        <strong>💧 Plants May Need Water Soon</strong><br>
+                        ${plantsWarning.map(p => p.name).join(', ')} are getting low on moisture.
+                    </div>
+                `;
+            }
+
+            alertsDiv.innerHTML = alertsHTML;
+        }
+
+        function updateAnalytics() {
+            document.getElementById('totalPlants').textContent = plants.length;
+            document.getElementById('plantsNeedingWater').textContent = 
+                plants.filter(p => p.status === 'needs-water').length;
+
+            const today = new Date().toDateString();
+            const todayWaterings = wateringLog.filter(log => 
+                new Date(log.timestamp).toDateString() === today
+            ).length;
+            document.getElementById('todayWaterings').textContent = todayWaterings;
+
+            const avgMoisture = plants.length > 0 ? 
+                Math.round(plants.reduce((sum, p) => sum + p.currentMoisture, 0) / plants.length) : 0;
+            document.getElementById('avgMoisture').textContent = avgMoisture + '%';
+
+            // Simple trend display
+            const trendsDiv = document.getElementById('moistureTrends');
+            trendsDiv.innerHTML = plants.map(plant => {
+                const data = moistureData[plant.id] || [];
+                const recent = data.slice(-7); // Last 7 readings
+                
+                return `
+                    <div style="margin-bottom: 15px; padding: 10px; background: white; border-radius: 5px;">
+                        <h4>${plant.name}</h4>
+                        <div style="display: flex; align-items: end; height: 50px; gap: 2px;">
+                            ${recent.map(point => `
+                                <div style="background: #667eea; width: 20px; height: ${point.moisture/2}px; border-radius: 2px 2px 0 0;" 
+                                     title="${point.moisture}% - ${new Date(point.timestamp).toLocaleDateString()}"></div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Settings
+        function saveSettings() {
+            settings.arduinoEndpoint = document.getElementById('arduinoEndpoint').value;
+            settings.updateInterval = parseInt(document.getElementById('updateInterval').value);
+            settings.notificationSound = document.getElementById('notificationSound').value === 'true';
+            
+            saveData();
+            startDataUpdates(); // Restart with new interval
+            alert('Settings saved successfully!');
+        }
+
+        function clearAllData() {
+            if (confirm('Are you sure you want to clear all data? This cannot be undone.')) {
+                plants = [];
+                moistureData = {};
+                wateringLog = [];
+                saveData();
+                updateDisplay();
+                alert('All data cleared successfully!');
+            }
+        }
+
+        // Data Persistence
+        function saveData() {
+            const data = {
+                plants,
+                moistureData,
+                wateringLog,
+                settings
+            };
+            // In a real app, this would save to a database
+            // For now, we'll use a simple object in memory
+            window.greenDreamData = data;
+            console.log('Data saved:', data);
+        }
+
+        function loadData() {
+            // In a real app, this would load from a database
+            // For now, we'll initialize with sample data if none exists
+            if (window.greenDreamData) {
+                const data = window.greenDreamData;
+                plants = data.plants || [];
+                moistureData = data.moistureData || {};
+                wateringLog = data.wateringLog || [];
+                settings = { ...settings, ...data.settings };
+            } else {
+                // Initialize with sample data for demonstration
+                plants = [
+                    {
+                        id: 1,
+                        name: 'Basil Plant',
+                        type: 'herb',
+                        sensorId: 'SENSOR_001',
+                        threshold: 35,
+                        addedDate: new Date().toISOString(),
+                        currentMoisture: 45,
+                        status: 'good'
+                    },
+                    {
+                        id: 2,
+                        name: 'Tomato Plant',
+                        type: 'vegetable',
+                        sensorId: 'SENSOR_002',
+                        threshold: 40,
+                        addedDate: new Date().toISOString(),
+                        currentMoisture: 25,
+                        status: 'needs-water'
+                    }
+                ];
+                
+                moistureData = {
+                    1: [],
+                    2: []
+                };
+            }
+
+            // Load settings into form
+            document.getElementById('arduinoEndpoint').value = settings.arduinoEndpoint;
+            document.getElementById('updateInterval').value = settings.updateInterval;
+            document.getElementById('notificationSound').value = settings.notificationSound.toString();
+        }
+    </script>
+</body>
+</html>
