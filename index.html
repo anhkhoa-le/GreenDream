@@ -1223,41 +1223,10 @@
                 wateringLog = data.wateringLog || [];
                 settings = { ...settings, ...data.settings };
             } else {
-                // Initialize with sample data for demonstration
-                plants = [
-                    {
-                        id: 1,
-                        name: 'Basil Plant',
-                        type: 'herb',
-                        sensorId: 'SENSOR_001',
-                        threshold: 35,
-                        addedDate: new Date().toISOString(),
-                        currentMoisture: 65,
-                        status: 'good'
-                    },
-                    {
-                        id: 2,
-                        name: 'Peace Lily',
-                        type: 'houseplant',
-                        sensorId: 'SENSOR_002',
-                        threshold: 40,
-                        addedDate: new Date().toISOString(),
-                        currentMoisture: 28,
-                        status: 'needs-water'
-                    },
-                    {
-                        id: 3,
-                        name: 'Succulent Garden',
-                        type: 'succulent',
-                        sensorId: 'SENSOR_003',
-                        threshold: 20,
-                        addedDate: new Date().toISOString(),
-                        currentMoisture: 35,
-                        status: 'good'
-                    }
-                ];
-                
-                moistureData = { 1: [], 2: [], 3: [] };
+                // Initialize with empty data - no sample plants
+                plants = [];
+                moistureData = {};
+                wateringLog = [];
             }
 
             // Load settings into form
