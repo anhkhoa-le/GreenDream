@@ -19,6 +19,10 @@ FUTURE FEATURES (?):
 
 
 WORKLOG:
+UPDATE --- 9/23 
+- cleaned UI a little bit more
+- figuring out integration with arduino
+
 UPDATE ---- 9/20
 - integration with arduino
 - rebuilt front-end
@@ -28,3 +32,6 @@ UPDATE ---- 9/19
 - Uploading project to github for first time
 - Just trying to get accustomed and learn how github works
 - Been running on VS code
+
+
+https://www.sltrib.com/news/education/2024/02/29/young-utah-inventors-aim-devices/
