@@ -559,7 +559,6 @@
             <div id="alerts"></div>
 
             <div class="plant-grid" id="plantGrid">
-                <!-- Plants will be dynamically added here -->
             </div>
         </div>
 
@@ -694,7 +693,6 @@
             <span class="close" onclick="closeEditModal()">&times;</span>
             <h2 style="margin-bottom: 25px; color: #1f2937;">Edit Plant</h2>
             <div id="editForm">
-                <!-- Form fields will be populated dynamically -->
             </div>
         </div>
     </div>
@@ -712,7 +710,6 @@
         let updateTimer;
         let editingPlant = null;
 
-        // Plant type emojis - removed emojis, using text only
         const plantEmojis = {
             herb: '',
             flower: '',
@@ -723,7 +720,6 @@
             other: ''
         };
 
-        // Initialize Application
         document.addEventListener('DOMContentLoaded', function() {
             loadData();
             updateDisplay();
